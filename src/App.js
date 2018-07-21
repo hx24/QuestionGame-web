@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import reducer,{rootSaga} from './reducer/index';
 import router from './router';
+import './assets/index.css';
 
 // sages
 const sagaMiddleware = createSagaMiddleware();

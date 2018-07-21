@@ -7,7 +7,7 @@ import BlankLayout from './layouts/BlankLayout';
 import Dashboard from './pages/Dashboard';
 import PostList from './pages/PostList';
 import CreatePost from './pages/CreatePost';
-import CateList from './pages/CateList';
+import RoundList from './pages/RoundList';
 import CreateCate from './pages/CreateCate';
 import TagList from './pages/TagList';
 import CreateTag from './pages/CreateTag';
@@ -17,6 +17,7 @@ import EditPassword from './pages/EditPassword';
 import BasicSetting from './pages/BasicSetting';
 import NavigationSetting from './pages/NavigationSetting';
 import NotFound from './pages/NotFound';
+import RoundDetail from './pages/RoundDetail';
 import Login from './pages/Login';
 
 const routerConfig = [
@@ -89,12 +90,12 @@ const routerConfig = [
   {
     path: '/round',
     layout: HeaderAsideFooterResponsiveLayout,
-    component: CateList,
+    component: RoundList,
     children: [
       {
         path: 'list',
         layout: HeaderAsideFooterResponsiveLayout,
-        component: CateList,
+        component: RoundList,
       },
       {
         path: 'create',
@@ -119,6 +120,11 @@ const routerConfig = [
         component: CreatePost,
       },
     ],
+  },
+  {
+    path: '/round/:id',
+    layout: HeaderAsideFooterResponsiveLayout,
+    component: RoundDetail,
   },
   {
     path: '*',

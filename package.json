@@ -5,8 +5,8 @@
   "homepage": "https://alibaba.github.io/ice/scaffold-preview/ice-design-cms.html",
   "dependencies": {
     "@antv/data-set": "^0.8.5",
-    "@icedesign/base": "^0.2.0",
-    "@icedesign/container": "^0.1.0",
+    "@icedesign/base": "^0.2.2",
+    "@icedesign/container": "^0.1.2",
     "@icedesign/data-binder": "^0.1.4",
     "@icedesign/form-binder": "^0.1.4",
     "@icedesign/icon": "^0.1.1",
@@ -14,8 +14,9 @@
     "@icedesign/layout": "^0.1.0",
     "@icedesign/menu": "^0.1.0",
     "@icedesign/skin": "^0.1.0",
+    "antd": "^3.7.0",
     "axios": "^0.18.0",
-    "bizcharts": "3.1.0",
+    "bizcharts": "^3.1.8",
     "classnames": "^2.2.5",
     "enquire-js": "^0.1.2",
     "foundation-symbol": "^0.1.0",
@@ -34,7 +35,11 @@
     "slate-react": "^0.11.6"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.3",
+    "babel-plugin-import": "^1.8.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "eslint": "^4.13.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-babel": "^4.1.1",
@@ -62,5 +67,17 @@
     "title": "ICE Design CMS",
     "screenshot": "https://img.alicdn.com/tfs/TB1ai53mqmWBuNjy1XaXXXCbXXa-1920-1080.png"
   },
-  "title": "question"
+  "title": "question",
+  "babel": {
+    "plugins": [
+      [
+        "import",
+        {
+          "libraryName": "antd",
+          "libraryDirectory": "es",
+          "style": "css"
+        }
+      ]
+    ]
+  }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Dialog, Button, Form, Input, Field } from '@icedesign/base';
+import { Dialog, Button, Form, Input, Field, DatePicker, moment } from '@icedesign/base';
+import {Button as AntButton} from 'antd';
 
 const FormItem = Form.Item;
 
@@ -25,7 +26,12 @@ export default class EditDialog extends Component {
       }
 
       const { dataIndex } = this.state;
-      this.props.getFormValues(dataIndex, values);
+      const {getFormValues, type} = this.props;
+      const submitValues = {
+        ...values,
+        time: values.time.getTime()
+      }
+      getFormValues(dataIndex, submitValues, type);
       this.setState({
         visible: false,
       });
@@ -33,7 +39,11 @@ export default class EditDialog extends Component {
   };
 
   onOpen = (index, record) => {
-    this.field.setValues({ ...record });
+    var time = record?new Date(record.time):null;
+    this.field.setValues({
+      ...record,
+      time
+    });
     this.setState({
       visible: true,
       dataIndex: index,
@@ -46,9 +56,18 @@ export default class EditDialog extends Component {
     });
   };
 
+  checkTime = (rule, value, callback) => {
+    console.log(value);
+    if (value && value.getTime() <= Date.now()) {
+      callback(new Error("开始时间不能小于当前时间!"));
+    } else {
+      callback();
+    }
+  }
+
   render() {
     const init = this.field.init;
-    const { index, record } = this.props;
+    const { index, record, type } = this.props;
     const formItemLayout = {
       labelCol: {
         fixedSpan: 6,
@@ -58,15 +77,27 @@ export default class EditDialog extends Component {
       },
     };
 
+    const title = type==='update'?'修改':'+ 添加场次';
+
+    const button = type==='update'?
+    <Button
+      size="small"
+      type="primary"
+      onClick={() => this.onOpen(index, record)}
+    >
+      {title}
+    </Button>:
+    <AntButton
+      type="primary"
+      onClick={() => this.onOpen(index, record)}
+    >
+      {title}
+    </AntButton>
+
     return (
+
       <div style={styles.editDialog}>
-        <Button
-          size="small"
-          type="primary"
-          onClick={() => this.onOpen(index, record)}
-        >
-          编辑
-        </Button>
+        {button}
         <Dialog
           style={{ width: 640 }}
           visible={this.state.visible}
@@ -74,7 +105,7 @@ export default class EditDialog extends Component {
           closable="esc,mask,close"
           onCancel={this.onClose}
           onClose={this.onClose}
-          title="编辑"
+          title={title}
         >
           <Form direction="ver" field={this.field}>
             <FormItem label="场次名称：" {...formItemLayout}>
@@ -94,10 +125,21 @@ export default class EditDialog extends Component {
             </FormItem>
 
             <FormItem label="开始时间：" {...formItemLayout}>
-              <Input
+              <DatePicker
                 {...init('time', {
-                  rules: [{ required: true, message: '必填选项' }],
-                })}
+                    rules: [
+                      { 
+                        required: true, 
+                        message: '必填选项',
+                        type: "date", 
+                      },
+                      {
+                        validator: this.checkTime
+                      }
+                    ]
+                  }
+                )}
+                showTime={{ defaultValue: moment.now() }}
               />
             </FormItem>
           </Form>
@@ -111,5 +153,5 @@ const styles = {
   editDialog: {
     display: 'inline-block',
     marginRight: '5px',
-  },
+  }
 };

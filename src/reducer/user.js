@@ -21,10 +21,7 @@ export default function user(state = initState, action) {
         case 'updateLoading': 
             return {
                 ...state,
-                loading: {
-                    ...state.loading,
-                    ...action.payload
-                }
+                loading: action.payload
             }
 
 
@@ -34,7 +31,7 @@ export default function user(state = initState, action) {
 }
 
 function* loginAsync(action) {
-    yield put({type: 'updateLoading', payload: {login: true}});
+    yield put({type: 'updateLoading', payload: true});
     yield put({type: 'updateError', payload: ""});
     const res = yield call(login, action.payload);
     if(res.error){
@@ -43,7 +40,7 @@ function* loginAsync(action) {
         // 登陆成功
         history.replace('/')
     }
-    yield put({type: 'updateLoading', payload: {login: false}});
+    yield put({type: 'updateLoading', payload: false});
 }
 
 

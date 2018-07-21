@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import CustomBreadcrumb from '../../components/CustomBreadcrumb';
 import TabTable from './components/TabTable';
 
-import './CateList.scss';
+import './RoundList.scss';
 
 export default class CateList extends Component {
   static displayName = 'CateList';
@@ -17,7 +17,7 @@ export default class CateList extends Component {
   render() {
     const breadcrumb = [
       { text: '场次管理', link: '' },
-      { text: '场次列表', link: '#/round/list' },
+      { text: '场次列表',},
     ];
     return (
       <div className="cate-list-page">
