@@ -10,6 +10,10 @@ import Login from './pages/Login';
 
 const routerConfig = [
   {
+    path: '/login',
+    component: Login,
+  },
+  {
     path: '/round',
     layout: HeaderAsideFooterResponsiveLayout,
     component: RoundList,
