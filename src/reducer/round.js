@@ -2,8 +2,6 @@ import {call, put, takeEvery} from 'redux-saga/effects';
 import {getRoundList, updateRound, deleteRound, addRound, getRoundDetail, updateQuestion, addQuestion, deleteQuestion} from '../api/round';
 import {store} from '../App';
 import {message} from 'antd';
-import createHistory from 'history/createHashHistory';
-const history = createHistory();
 
 const initState = {
     pagesize: 5,

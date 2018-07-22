@@ -89,12 +89,12 @@ export default class Lists extends Component {
           </div>
           {questions.length===0?<div style={styles.noData}>暂无题目</div>:null}
           <div style={styles.contentList}>
-            {questions.map(question => {
+            {questions.map((question,i) => {
               return (
                 <div style={styles.item} key={question.ID}>
                   <Row >
                     <Col l="16">
-                      <h6 style={styles.title}>{question.question}</h6>
+                      <h6 style={styles.title}>{i+1}.&nbsp;&nbsp;&nbsp;{question.question}</h6>
                     </Col>
                     <Col l="8">
                       <div style={styles.operWrap}>
