@@ -19,7 +19,7 @@ const backgroundImage =
   require('./images/TB1zsNhXTtYBeNjy1XdXXXXyVXa-2252-1500.png');
 
 @withRouter
-@connect(({user})=>user)
+@connect(({user, loadings})=>({...user,loadings}))
 export default class UserLogin extends Component {
   static displayName = 'UserLogin';
 
@@ -79,7 +79,7 @@ export default class UserLogin extends Component {
 
   render() {
 
-    const {errorMsg,loading} = this.props;
+    const {errorMsg,loadings} = this.props;
     return (
       <div style={styles.userLogin} className="user-login">
         <div
@@ -152,10 +152,10 @@ export default class UserLogin extends Component {
                     type="primary"
                     onClick={this.handleSubmit}
                     style={styles.submitBtn}
-                    loading={loading.login}
-                    disabled={loading.login}
+                    loading={loadings.login}
+                    disabled={loadings.login}
                   >
-                    {loading.login?'登录中...':'登 录'}
+                    {loadings.login?'登录中...':'登 录'}
                   </Button>
                 </Row>
 

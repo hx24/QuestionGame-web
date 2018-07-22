@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import IceContainer from '@icedesign/container';
 import CustomTable from './components/CustomTable';
 import EditDialog from './components/EditDialog';
-import DeleteBalloon from './components/DeleteBalloon';
+import DeleteBalloon from '../../../../components/DeleteBalloon';
+
 import { connect } from "react-redux";
 import { Loading, moment, Button} from "@icedesign/base";
 import { Pagination } from 'antd';
@@ -18,15 +19,13 @@ export default class TabTable extends Component {
   static defaultProps = {};
 
   componentDidMount(){
-    this.getPageData(1)
+    if(this.props.list.length===0){
+      this.getPageData(1)
+    }
   }
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      current: 1
-    };
 
     this.columns = [
       {
@@ -95,8 +94,9 @@ export default class TabTable extends Component {
       type: b?'addRound':'updateRound',
       payload: values
     })
-    this.setState({
-      current: 1
+    dispatch({
+      type: 'updatePageindex',
+      payload: 1
     })
   };
 
@@ -111,9 +111,10 @@ export default class TabTable extends Component {
   };
 
   handlePageChange = (current) => {
-    this.setState({
-      current
-    });
+    this.props.dispatch({
+      type: 'updatePageindex',
+      payload: current
+    })
     this.getPageData(current)
   }
 
@@ -147,7 +148,7 @@ export default class TabTable extends Component {
             />
             {count?<Pagination 
               style={styles.pagination} 
-              current={this.state.current} 
+              current={this.props.pageindex} 
               onChange={this.handlePageChange} 
               total={count}
               pageSize={pagesize}

@@ -25,11 +25,6 @@ const headerMenuConfig = [
 ];
 
 const asideMenuConfig = [
-  {
-    name: 'Dashboard',
-    path: '/',
-    icon: 'home',
-  },
   // {
   //   name: '文章管理',
   //   path: '/post',

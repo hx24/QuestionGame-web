@@ -6,7 +6,8 @@ import loadings from './loadings';
 
 export default combineReducers({ 
     user,
-    round
+    round,
+    loadings
 });
 
  

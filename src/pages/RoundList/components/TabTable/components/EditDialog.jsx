@@ -65,6 +65,18 @@ export default class EditDialog extends Component {
     }
   }
 
+  checkReward(rule, value, callback) {
+    if(!value){
+      callback(new Error("必填项"));
+    }else if(isNaN(Number.parseInt(value))){
+      callback(new Error("请输入数字"));
+    }else if(Number.parseInt(value)<=0){
+      callback(new Error("请输入大于0的数字"));
+    }else{
+      callback()
+    }
+  }
+
   render() {
     const init = this.field.init;
     const { index, record, type } = this.props;
@@ -118,8 +130,9 @@ export default class EditDialog extends Component {
 
             <FormItem label="奖金总额：" {...formItemLayout}>
               <Input
+                htmlType="number"
                 {...init('reward', {
-                  rules: [{ required: true, message: '必填选项' }],
+                  rules: [{validator: this.checkReward}],
                 })}
               />
             </FormItem>

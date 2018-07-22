@@ -32,7 +32,10 @@ export default class DeleteBalloon extends Component {
   };
 
   render() {
-    const visibleTrigger = (
+
+    const {render} = this.props;
+
+    const visibleTrigger = render?render:(
       <Button size="small" type="secondary" shape="warning">
         删除
       </Button>

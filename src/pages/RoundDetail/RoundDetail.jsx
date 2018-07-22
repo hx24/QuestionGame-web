@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Content from './components/Content';
 import CustomBreadcrumb from '../../components/CustomBreadcrumb';
-import OverviewSatesChart from './components/OverviewSatesChart'
+// import OverviewSatesChart from './components/OverviewSatesChart'
 
 export default class RoundDetail extends Component {
   static displayName = 'RoundDetail';
@@ -22,7 +22,7 @@ export default class RoundDetail extends Component {
     return (
       <div className="round-detail-page">
         <CustomBreadcrumb dataSource={breadcrumb} />
-        <OverviewSatesChart/>
+        {/* <OverviewSatesChart/> */}
         <Content />
       </div>
     );

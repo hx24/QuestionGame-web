@@ -1,6 +1,6 @@
 export default function loadings(state = {}, action) {
     switch (action.type) {
-        case 'updateLoading':
+        case 'updateGlobalLoading':
             return {
                 ...state,
                 ...action.payload,

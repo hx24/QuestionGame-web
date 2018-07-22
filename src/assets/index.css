@@ -4,3 +4,6 @@
     background-color: #1890ff;
     border-color: #1890ff;
 }
+.ant-notification-notice-with-icon .ant-notification-notice-message{
+     word-break: break-all   /* 允许Notification组件的标题强制换行 */
+}

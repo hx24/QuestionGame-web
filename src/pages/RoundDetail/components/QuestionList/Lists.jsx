@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import IceContainer from '@icedesign/container'; 
-import { Grid, Icon, Checkbox} from '@icedesign/base';
-import {Button} from 'antd';
+import { Grid, Icon, Checkbox, Loading} from '@icedesign/base';
+import EditDialog from './EditDialog';
+import DeleteBalloon from '../../../../components/DeleteBalloon';
+import {connect} from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 const { Row, Col } = Grid;
 
-const getData = () => {
-  return Array.from({ length: 10 }).map((item, index) => {
-    return {
-      title: `${index + 1}. 这里是试卷名称这里是试卷名称这里是试卷名称`,
-      time: `2018-06-1${index}`,
-      citation: index + 1,
-      score: index + 90,
-      subject: '自然语言',
-      count: 20,
-    };
-  });
-};
+const mapStateToProps = ({round, loadings}) => {
+  return {
+    detail: round.detail,
+    loading: loadings.roundDetail
+  }
+}
 
+const answersLables = ["A. ", "B. ", "C. ", "D. "]
+
+@withRouter
+@connect(mapStateToProps)
 export default class Lists extends Component {
   static displayName = 'Lists';
 
@@ -25,92 +26,116 @@ export default class Lists extends Component {
     super(props);
   }
 
+  componentDidMount(){
+      const {dispatch, match} = this.props;
+      dispatch({
+        type: 'getRoundDetail',
+        payload: { id: match.params.id}
+      })
+  }
+
+  getFormValues = (values, type) => {
+    const {dispatch, match} = this.props;
+    const payload = {
+      ...values,
+      id: values.ID,
+      roundId: match.params.id
+    }
+    dispatch({
+      type: type==='add'?'addQuestion':'updateQuestion',
+      payload
+    })
+  }
+
+  editRender=(
+    <div style={styles.oper}>
+      <Icon size="xs" type="edit" style={styles.operIcon} />
+      <span style={styles.operText}>修改</span>
+    </div>
+  )
+
+  deleteRender = (
+    <div style={styles.oper}>
+      <Icon size="xs" type="ashbin" style={styles.operIcon} />
+      <span style={styles.operText}>删除</span>
+    </div>
+  )
+
+  handleRemove = id => {
+    this.props.dispatch({
+      type: 'deleteQuestion',
+      payload: {
+        id,
+        roundId: this.props.match.params.id
+      }
+    })
+  }
+
+
+
   render() {
-    const data = getData();
+
+    const {loading, detail} = this.props;
+    const questions = detail.questions;
+
     return (
       <IceContainer>
-        <div style={styles.addContainer}>
-          <Button
-            type="primary"
-          >
-            + &nbsp; 添加题目
-          </Button>
-        </div>
-        <div style={styles.contentList}>
-          {data.map((item, index) => {
-            return (
-              <div style={styles.item} key={index}>
-                <Row >
-                  <Col l="16">
-                    <h6 style={styles.title}>{item.title}</h6>
-                  </Col>
-                  <Col l="8">
-                    <div style={styles.operWrap}>
-                      <div style={styles.oper}>
-                        <Icon size="xs" type="edit" style={styles.operIcon} />
-                        <span style={styles.operText}>编辑</span>
+        <Loading style={{width: '100%'}} visible={loading} shape="fusion-reactor" color="rgb(32, 119, 255)">
+          <div style={styles.addContainer}>
+            <EditDialog 
+              type="add"
+              getFormValues={this.getFormValues}
+            />
+          </div>
+          {questions.length===0?<div style={styles.noData}>暂无题目</div>:null}
+          <div style={styles.contentList}>
+            {questions.map(question => {
+              return (
+                <div style={styles.item} key={question.ID}>
+                  <Row >
+                    <Col l="16">
+                      <h6 style={styles.title}>{question.question}</h6>
+                    </Col>
+                    <Col l="8">
+                      <div style={styles.operWrap}>
+                        <EditDialog 
+                          type="update"
+                          record={question}
+                          render={this.editRender}
+                          getFormValues={this.getFormValues}
+                        />
+                        
+                        <DeleteBalloon
+                          render={this.deleteRender}
+                          handleRemove={() => this.handleRemove(question.ID)}
+                        />
                       </div>
-                      <div style={styles.oper}>
-                        <Icon size="xs" type="ashbin" style={styles.operIcon} />
-                        <span style={styles.operText}>删除</span>
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-                
-                <Row style={styles.metaWrap}>
-                  <Col 
-                    xl="6"
-                    m="12"
-                    xxs="24"
-                  >
-                    <div style={styles.meta}>
-                      <Checkbox disabled>
-                        <span style={styles.meteText}>A. <span>这是十五个字这是十五个字这是十</span></span>
-                      </Checkbox>
-                    </div>
-                  </Col>
-                  <Col 
-                    xl="6"
-                    m="12"
-                    xxs="24"
-
-                  >
-                    <div style={styles.meta}>
-                      <Checkbox disabled checked>
-                        <span style={styles.meteText}>B. <span>这是十五个字这是十五个字这是十</span></span>
-                      </Checkbox>
-                    </div>
-                  </Col>
-                  <Col 
-                    xl="6"
-                    m="12"
-                    xxs="24"
-
-                  >
-                    <div style={styles.meta}>
-                      <Checkbox disabled>
-                        <span style={styles.meteText}>C. <span>这是十五个字这是十五个字这是十</span></span>
-                      </Checkbox>
-                    </div>
-                  </Col>
-                  <Col 
-                    xl="6"
-                    m="12"
-                    xxs="24"
-
-                  >
-                    <div style={styles.meta}>
-                      <Checkbox disabled>
-                        <span style={styles.meteText}>D. <span>这是十五个字这是十五个字这是十</span></span>
-                      </Checkbox>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-            );
-          })}
-        </div>
+                    </Col>
+                  </Row>
+                  
+                  <Row style={styles.metaWrap}>
+                    {question.answers.map((answer,i)=>{
+                      return answer?(
+                        <Col
+                          key={question.ID+i}
+                          xl="6"
+                          m="12"
+                          xxs="24"
+                        >
+                          <div style={styles.meta}>
+                            <Checkbox disabled checked={question.correct===i}>
+                              <span style={styles.meteText}>{answersLables[i]}&nbsp;<span>{answer}</span></span>
+                            </Checkbox>
+                          </div>
+                        </Col>
+                      ):null
+                    })}
+                  </Row>
+                </div>
+              );
+            })}
+          </div>
+        </Loading>
       </IceContainer>
     );
   }
@@ -128,6 +153,12 @@ const styles = {
   },
   addContainer: {
     textAlign: 'right'
+  },
+  noData: {
+    marginTop: '20px',
+    textAlign: 'center',
+    color: '#ccc',
+    fontSize: '18px'
   },
   item: {
     position: 'relative',
@@ -154,12 +185,12 @@ const styles = {
     position: 'absolute',
     right: '0',
     display: 'flex',
-    cursor: 'pointer',
   },
   oper: {
     marginLeft: '15px',
     fontSize: '13px',
     color: '#999',
+    cursor: 'pointer',
   },
   operIcon: {
     marginRight: '8px',
