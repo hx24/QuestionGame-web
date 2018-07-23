@@ -4,7 +4,7 @@ import cx from 'classnames';
 import Layout from '@icedesign/layout';
 import { Icon } from '@icedesign/base';
 import Menu, { SubMenu, Item as MenuItem } from '@icedesign/menu';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter} from 'react-router-dom';
 import FoundationSymbol from 'foundation-symbol';
 import { enquire } from 'enquire-js';
 import Header from './../../components/Header';
