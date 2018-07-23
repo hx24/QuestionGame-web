@@ -3,7 +3,9 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import reducer,{rootSaga} from './reducer/index';
-import router from './router';
+import { Switch, Route, HashRouter as Router } from 'react-router-dom';
+import BasicLayout from './layouts/HeaderAsideFooterResponsiveLayout'
+import {getComponentAsync} from './utils/util';
 import './assets/index.css';
 
 // sages
@@ -15,8 +17,19 @@ const store = createStore(reducer, compose(
 sagaMiddleware.run(rootSaga);
 
 export {store};
-
 export default
 <Provider store={store}>
-    {router}
+    <Router>
+        <Switch>
+            <Route
+                exact
+                path="/login"
+                component={getComponentAsync('Login')}
+            />
+            <Route
+                path="/"
+                render={props => <BasicLayout {...props} />}
+            />
+        </Switch>
+    </Router>
 </Provider>

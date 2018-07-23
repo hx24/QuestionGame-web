@@ -10,13 +10,18 @@ import { enquire } from 'enquire-js';
 import Header from './../../components/Header';
 import Footer from './../../components/Footer';
 import Logo from './../../components/Logo';
-import { asideMenuConfig } from './../../menuConfig';
 import './scss/light.scss';
 import './scss/dark.scss';
+// custom import
+import { HashRouter as Router} from 'react-router-dom';
+import { connect } from 'react-redux';
+import routers from '../../router';
+import {asideMenuConfig} from '../../menuConfig';
 
 // 设置默认的皮肤配置，支持 dark 和 light 两套皮肤配置
 const theme = typeof THEME === 'undefined' ? 'dark' : THEME;
 @withRouter
+@connect((state)=>state.user)
 export default class HeaderAsideFooterResponsiveLayout extends Component {
   static propTypes = {};
 
@@ -37,6 +42,7 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
 
   componentDidMount() {
     this.enquireScreenRegister();
+    this.props.dispatch({type: 'getUser'})
   }
 
   /**
@@ -110,24 +116,27 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
   /**
    * 响应式时点击菜单进行切换
    */
-  onMenuClick = () => {
+  onMenuClick = (selectedKeys) => {
     this.toggleMenu();
+    const {history} = this.props;
+    if(selectedKeys.key!==history.location.pathname)
+    history.push(selectedKeys.key)
   };
 
   /**
    * 获取当前展开的菜单项
    */
   getOpenKeys = () => {
-    const { match } = this.props;
-    const matched = match.path;
+    // const { match } = this.props;
+    // const matched = match.path;
     let openKeys = [];
-
-    Array.isArray(asideMenuConfig) &&
-      asideMenuConfig.forEach((item, index) => {
-        if (matched.startsWith(item.path)) {
-          openKeys = [`${index}`];
-        }
-      });
+    
+    // Array.isArray(asideMenuConfig) &&
+    //   asideMenuConfig.forEach((item, index) => {
+    //     if (matched.startsWith(item.path)) {
+    //       openKeys = [`${index}`]; 
+    //     }
+    //   });
 
     return openKeys;
   };
@@ -135,6 +144,8 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
   render() {
     const { location } = this.props;
     const { pathname } = location;
+
+    const selectedKeys = pathname.split('/').map(path=>('/'+path));
 
     return (
       <Layout
@@ -180,9 +191,9 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
               style={{ width: this.state.collapse ? 60 : 200 }}
               inlineCollapsed={this.state.collapse}
               mode="inline"
-              selectedKeys={[pathname]}
+              selectedKeys={selectedKeys}
               openKeys={this.state.openKeys}
-              defaultSelectedKeys={[pathname]}
+              defaultSelectedKeys={selectedKeys}
               onOpenChange={this.onOpenChange}
               onClick={this.onMenuClick}
             >
@@ -205,18 +216,9 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
                         }
                       >
                         {nav.children.map((item) => {
-                          const linkProps = {};
-                          if (item.newWindow) {
-                            linkProps.href = item.path;
-                            linkProps.target = '_blank';
-                          } else if (item.external) {
-                            linkProps.href = item.path;
-                          } else {
-                            linkProps.to = item.path;
-                          }
                           return (
                             <MenuItem key={item.path}>
-                              <Link {...linkProps}>{item.name}</Link>
+                              <span>{item.name}</span>
                             </MenuItem>
                           );
                         })}
@@ -234,16 +236,14 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
                   }
                   return (
                     <MenuItem key={nav.path}>
-                      <Link {...linkProps}>
-                        <span>
-                          {nav.icon ? (
-                            <FoundationSymbol size="small" type={nav.icon} />
-                          ) : null}
-                          <span className="ice-menu-collapse-hide">
-                            {nav.name}
-                          </span>
+                      <span>
+                        {nav.icon ? (
+                          <FoundationSymbol size="small" type={nav.icon} />
+                        ) : null}
+                        <span className="ice-menu-collapse-hide">
+                          {nav.name}
                         </span>
-                      </Link>
+                      </span>
                     </MenuItem>
                   );
                 })}
@@ -251,7 +251,12 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
             {/* 侧边菜单项 end */}
           </Layout.Aside>
           {/* 主体内容 */}
-          <Layout.Main>{this.props.children}</Layout.Main>
+          <Layout.Main>
+            <Router>
+              {/* {this.state.routerConfig} */}
+              {routers}
+            </Router>
+          </Layout.Main>
         </Layout.Section>
         <Footer />
       </Layout>

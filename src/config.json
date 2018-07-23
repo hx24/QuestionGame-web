@@ -1,3 +1,22 @@
-{
-    "name": "huangxin"
-}
+[
+    {
+        "icon": "cascades",
+        "name": "场次管理",
+        "path": "round",
+        "componentDir": "RoundList",
+        "children": []
+    },
+    {
+        "icon": "cascades",
+        "name": "场次管理",
+        "hideMenu": true,
+        "path":"round/:id",
+        "componentDir": "RoundDetail"
+    },
+    {
+        "icon": "yonghu",
+        "name": "用户管理",
+        "path":"user",
+        "componentDir": "RoundDetail"
+    }
+]

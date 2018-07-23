@@ -1,40 +1,63 @@
 // 以下文件格式为描述路由的协议格式
-// 你可以调整 routerConfig 里的内容
-// 变量名 routerConfig 为 iceworks 检测关键字，请不要修改名称
+// 规定页面都必须添加到pages中文件夹中， 且在页面根文件夹中的index.js导出 
+import config from  './config.json';
+import {getComponentAsync} from './utils/util';
 
-import HeaderAsideFooterResponsiveLayout from './layouts/HeaderAsideFooterResponsiveLayout';
-import RoundList from './pages/RoundList';
-import NotFound from './pages/NotFound';
-import RoundDetail from './pages/RoundDetail';
-import Login from './pages/Login';
+function getFilterRouterConfig(config){
+  return config.map(({path,componentDir,children})=>{
+    if(!componentDir){
+      console.error(`${path}未设置component路径`);
+      return null;
+    }
+    const asyncRouter =  {
+      path,
+      component: getComponentAsync(componentDir),
+    }
+    if(children){
+      asyncRouter.children=getFilterRouterConfig(children);
+    }
+    return asyncRouter;
+  })
+}
 
-const routerConfig = [
-  {
-    path: '/login',
-    component: Login,
-  },
-  {
-    path: '/round',
-    layout: HeaderAsideFooterResponsiveLayout,
-    component: RoundList,
-    children: [
-      {
-        path: 'list',
-        layout: HeaderAsideFooterResponsiveLayout,
-        component: RoundList,
-      },
-    ],
-  },
-  {
-    path: '/round/:id',
-    layout: HeaderAsideFooterResponsiveLayout,
-    component: RoundDetail,
-  },
-  {
-    path: '*',
-    layout: HeaderAsideFooterResponsiveLayout,
-    component: NotFound,
-  },
-];
+export default getFilterRouterConfig(config);
 
-export default routerConfig;
+
+
+
+
+
+
+// import HeaderAsideFooterResponsiveLayout from './layouts/HeaderAsideFooterResponsiveLayout';
+// import RoundList from './pages/RoundList';
+// import RoundDetail from './pages/RoundDetail';
+// import Login from './pages/Login';
+
+// const routerConfig1 = [
+//   {
+//     path: '/login',
+//     component: Login,
+//   },
+//   {
+//     path: '/round',
+//     layout: HeaderAsideFooterResponsiveLayout,
+//     component: RoundList,
+//     children: [
+//       {
+//         path: 'list',
+//         layout: HeaderAsideFooterResponsiveLayout,
+//         component: RoundList,
+//       },
+//     ],
+//   },
+//   {
+//     path: '/round/:id',
+//     layout: HeaderAsideFooterResponsiveLayout,
+//     component: RoundDetail,
+//   },
+//   {
+//     path: '*',
+//     layout: HeaderAsideFooterResponsiveLayout,
+//     component: NotFound,
+//   },
+// ];

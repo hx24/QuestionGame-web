@@ -1,6 +1,6 @@
 // 菜单配置
 // headerMenuConfig：头部导航配置
-// asideMenuConfig：侧边导航配置
+import config from  './config.json';
 
 const headerMenuConfig = [
   {
@@ -24,25 +24,23 @@ const headerMenuConfig = [
   },
 ];
 
-const asideMenuConfig = [
-  // {
-  //   name: '文章管理',
-  //   path: '/post',
-  //   icon: 'copy',
-  //   children: [
-  //     { name: '文章列表', path: '/post/list' },
-  //     { name: '添加文章', path: '/post/create' },
-  //   ],
-  // },
-  {
-    name: '场次管理',
-    path: '/round',
-    icon: 'cascades',
-    // children: [
-    //   { name: '场次列表', path: '/round/list' },
-    //   { name: '添加场次', path: '/round/create' },
-    // ],
-  },
-];
+function getMenu(config, parent = ''){
+  const res = config.map(({name, path ,icon, children, hideMenu})=>{
+    if(hideMenu)return null;
+    const parentPath = parent ? parent + '/' : '/';
+    const menu = {
+      name,
+      icon,
+      path: parentPath+path,
+    }
+    if(children){
+      menu.children=getMenu(children, menu.path)
+    }
+    return menu;
+  })
+  return res.filter(item=>item);
+}
+
+const asideMenuConfig = getMenu(config);
 
 export { headerMenuConfig, asideMenuConfig };
