@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import IceContainer from '@icedesign/container';
 import { Tab } from "@icedesign/base";
-import QuestionList from '../QuestionList'
+import QuestionList from '../QuestionList';
+import Rank from '../Rank';
 
 const TabPane = Tab.TabPane;
 
@@ -32,7 +33,7 @@ export default class Content extends Component {
                 <QuestionList />
             </TabPane>
             <TabPane key="rank" tab="排行榜" onClick={this.handleClick}>
-                这里是排行榜内容
+                <Rank/>
             </TabPane>
         </Tab>
       </IceContainer>

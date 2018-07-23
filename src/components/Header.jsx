@@ -10,8 +10,9 @@ import { headerMenuConfig } from './../menuConfig';
 import Logo from './Logo';
 
 export default class Header extends PureComponent {
+
   render() {
-    const { width, theme, isMobile, className, style } = this.props;
+    const { width, theme, isMobile, className, style ,logout} = this.props;
 
     return (
       <Layout.Header
@@ -81,14 +82,14 @@ export default class Header extends PureComponent {
                 />
                 <div className="user-profile">
                   <span className="user-name" style={{ fontSize: '13px' }}>
-                    淘小宝
+                    admin
                   </span>
                   <br />
                   <span
                     className="user-department"
                     style={{ fontSize: '12px', color: '#999' }}
                   >
-                    技术部
+                    管理员
                   </span>
                 </div>
                 <Icon
@@ -102,20 +103,10 @@ export default class Header extends PureComponent {
             className="user-profile-menu"
           >
             <ul>
-              <li className="user-profile-menu-item">
-                <Link to="/">
-                  <FoundationSymbol type="person" size="small" />我的主页
-                </Link>
-              </li>
-              <li className="user-profile-menu-item">
-                <Link to="/setting/basic">
-                  <FoundationSymbol type="repair" size="small" />设置
-                </Link>
-              </li>
-              <li className="user-profile-menu-item">
-                <Link to="/login">
+              <li className="user-profile-menu-item" onClick={logout}>
+                <div>
                   <FoundationSymbol type="compass" size="small" />退出
-                </Link>
+                </div>
               </li>
             </ul>
           </Balloon>
@@ -124,3 +115,4 @@ export default class Header extends PureComponent {
     );
   }
 }
+

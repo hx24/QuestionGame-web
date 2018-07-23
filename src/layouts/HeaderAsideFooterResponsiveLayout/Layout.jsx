@@ -17,6 +17,7 @@ import { HashRouter as Router} from 'react-router-dom';
 import { connect } from 'react-redux';
 import routers from '../../router';
 import {asideMenuConfig} from '../../menuConfig';
+import {delCookie} from '../../utils/util';
 
 // 设置默认的皮肤配置，支持 dark 和 light 两套皮肤配置
 const theme = typeof THEME === 'undefined' ? 'dark' : THEME;
@@ -42,7 +43,8 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
 
   componentDidMount() {
     this.enquireScreenRegister();
-    this.props.dispatch({type: 'getUser'})
+    const {history} = this.props;
+    if(history.location.pathname==='/')history.push('/round');
   }
 
   /**
@@ -123,6 +125,11 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
     history.push(selectedKeys.key)
   };
 
+  logout = ()=>{
+    delCookie('question');
+    this.props.history.push('/login')
+  }
+
   /**
    * 获取当前展开的菜单项
    */
@@ -158,6 +165,7 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
         )}
       >
         <Header
+          logout={this.logout}
           theme={theme}
           isMobile={this.state.isScreen !== 'isDesktop' ? true : undefined}
         />

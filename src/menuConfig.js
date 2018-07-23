@@ -3,25 +3,11 @@
 import config from  './config.json';
 
 const headerMenuConfig = [
-  {
-    name: '首页',
-    path: '/',
-    icon: 'home',
-  },
-  {
-    name: '反馈',
-    path: 'https://github.com/alibaba/ice',
-    external: true,
-    newWindow: true,
-    icon: 'message',
-  },
-  {
-    name: '帮助',
-    path: 'https://alibaba.github.io/ice',
-    external: true,
-    newWindow: true,
-    icon: 'bangzhu',
-  },
+  // {
+  //   name: '首页',
+  //   to: '/',
+  //   icon: 'home',
+  // }
 ];
 
 function getMenu(config, parent = ''){
