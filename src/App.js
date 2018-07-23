@@ -12,7 +12,7 @@ import './assets/index.css';
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducer, compose(
   applyMiddleware(sagaMiddleware),
-  window.devToolsExtension?window.devToolsExtension():()=>{}
+  window.devToolsExtension?window.devToolsExtension():f=>f
 ));
 sagaMiddleware.run(rootSaga);
 
