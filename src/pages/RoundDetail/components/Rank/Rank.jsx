@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { Loading, moment, Button} from "@icedesign/base";
 import { Pagination } from 'antd';
 import { withRouter } from 'react-router-dom';
+import {Spin} from 'antd';
+import { log } from 'util';
 
 @withRouter
 @connect(({round})=>({...round}))
@@ -87,7 +89,7 @@ export default class Rank extends Component {
 
     return (
       <div className="tab-table">
-          <Loading visible={loading} shape="fusion-reactor" color="rgb(32, 119, 255)">
+          <Spin spinning={loading}>
             <CustomTable
               style={styles.customTable}
               dataSource={mockData}
@@ -101,7 +103,7 @@ export default class Rank extends Component {
               total={count}
               pageSize={pagesize}
             />:null}
-          </Loading>
+          </Spin>
       </div>
     );
   }

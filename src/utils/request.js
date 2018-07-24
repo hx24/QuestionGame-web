@@ -43,8 +43,8 @@ function checkStatus(err) {
 
 
 export default function (path, param = {}) {
-    // const url = `http://localhost:8000/admin/${path}`;
-    const url = `/admin/${path}`;
+    const url = `http://localhost/admin/${path}`;
+    // const url = `/admin/${path}`;
     const action = {
         type: 'updateGlobalLoading',
         payload: {}

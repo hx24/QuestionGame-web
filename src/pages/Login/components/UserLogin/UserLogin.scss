@@ -30,12 +30,22 @@
     align-items: center;
     .slogan {
       text-align: center;
-      color: #fff;
+      color: #666;
       font-size: 36px;
       letter-spacing: 2px;
       line-height: 48px;
     }
   }
+}
+
+.login-form {
+  width: 240px;
+}
+.login-form-forgot {
+  float: right;
+}
+.login-form-button {
+  width: 100%;
 }
 
 @media screen and (max-width: 720px) {

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import IceContainer from '@icedesign/container'; 
-import { Grid, Icon, Checkbox, Loading} from '@icedesign/base';
+import { Grid, Icon, Checkbox} from '@icedesign/base';
 import EditDialog from './EditDialog';
 import DeleteBalloon from '../../../../components/DeleteBalloon';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
+
+import {Spin} from 'antd';
 
 const { Row, Col } = Grid;
 
@@ -80,7 +82,7 @@ export default class Lists extends Component {
 
     return (
       <IceContainer>
-        <Loading style={{width: '100%'}} visible={loading} shape="fusion-reactor" color="rgb(32, 119, 255)">
+        <Spin spinning={loading}>
           <div style={styles.addContainer}>
             <EditDialog 
               type="add"
@@ -135,7 +137,7 @@ export default class Lists extends Component {
               );
             })}
           </div>
-        </Loading>
+        </Spin>
       </IceContainer>
     );
   }

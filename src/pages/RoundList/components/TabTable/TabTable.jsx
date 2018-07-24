@@ -5,9 +5,11 @@ import EditDialog from './components/EditDialog';
 import DeleteBalloon from '../../../../components/DeleteBalloon';
 
 import { connect } from "react-redux";
-import { Loading, moment, Button} from "@icedesign/base";
+import { moment, Button} from "@icedesign/base";
 import { Pagination } from 'antd';
 import { withRouter } from 'react-router-dom';
+
+import {Spin} from 'antd';
 
 @withRouter
 @connect(({round})=>({...round}))
@@ -135,7 +137,7 @@ export default class TabTable extends Component {
     return (
       <div className="tab-table">
         <IceContainer>
-          <Loading visible={loading} shape="fusion-reactor" color="rgb(32, 119, 255)">
+          <Spin spinning={loading}>
             <EditDialog
               type="add"
               getFormValues={this.getFormValues}
@@ -153,7 +155,7 @@ export default class TabTable extends Component {
               total={count}
               pageSize={pagesize}
             />:null}
-          </Loading>
+          </Spin>
         </IceContainer>
       </div>
     );
