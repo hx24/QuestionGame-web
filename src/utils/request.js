@@ -4,6 +4,11 @@ import createHistory from 'history/createHashHistory';
 import { notification, Icon } from 'antd';
 import {store} from '../App';
 
+const server = axios.create({
+    withCredentials: true,
+    timeout: 5000
+});
+
 const history = createHistory();
 
 const errMsg = {
@@ -14,6 +19,7 @@ const errMsg = {
 }
 
 function checkStatus(err) {
+    console.log(JSON.stringify(err))
     const errCode = err.response?err.response.status:408;
     var message = '';
     if(err.response&&err.response.data.error){
@@ -30,7 +36,7 @@ function checkStatus(err) {
             icon: <Icon type="close" style={{ color: 'red' }} />,
         });
     }
-    // 在此处检查状态码等操作
+    // 在此处检查状态码等操作 
     return new Promise((resolve) => {
         resolve({
             error: {
@@ -51,13 +57,8 @@ export default function (path, param = {}) {
     }
     action.payload[path] = true;
     store.dispatch(action)
-    return axios.create({
-        withCredentials: 'include',
-        timeout: 3000
-    })
-        .post(url, param, {
-            timeout: 3000
-        })
+    return server
+        .post(url, param)
         .then(res => {
             return res.data;
         })
