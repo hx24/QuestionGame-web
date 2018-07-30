@@ -19,8 +19,9 @@ export default class ExpandedTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: 1,
-      expandedRowKeys: []
+      userRoundPagesize: 5,
+      userRoundPageindex: 1,
+      expandedRowKey: ''
     };
   }
 
@@ -51,39 +52,86 @@ export default class ExpandedTable extends Component {
   renderEditor = (valueKey, value, index, record) => {
     return (
       <CellEditor
-        valueKey={valueKey}
-        index={index}
         value={record[valueKey]}
-        onChange={this.changeDataSource}
+        id={record.key}
+        onReviveChange={this.handleReviveChange}
       />
     );
   };
 
-  handleRewardDetailClick = key =>{
-    if (this.state.expandedRowKeys.includes(key) ) {
+  handleReviveChange = (id, revive) => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'user/editRevive',
+      payload: {
+        id,
+        revive
+      }
+    })
+  }
+
+  handleRewardDetailClick = (id, index) =>{
+    if (this.state.expandedRowKey===id) {
       this.setState({
-        expandedRowKeys: []
+        expandedRowKey: ''
       })
     }else{
+      this.props.dispatch({
+        type: 'user/updateUserRoundListNCount',
+        payload: {
+          count: 0,
+          list: []
+        }
+      })
+      this.getUserRoundList(id, this.state.userRoundPagesize, 1)
       this.setState({
-        expandedRowKeys: [key]
+        expandedRowKey: id
       })
     }
   }
 
+  getUserRoundList = (id, pagesize, pageindex, index) => {
+    const {dispatch} = this.props;
+    this.setState({
+      userRoundPagesize: pagesize,
+      userRoundPageindex: pageindex
+    })
+    dispatch({
+      type: 'user/getUserRound',
+      payload: {
+        id,
+        pagesize,
+        pageindex
+      }
+    })
+  }
+
   getUserListData = (userList) => {
     const This = this;
-    return userList.map( user => {
+    return userList.map((user, index)=> {
       const {ID, name, phone, revive} = user;
+      const {expandedRowKey, userRoundPagesize, userRoundPageindex} = This.state;
         return {
           key: ID,
           name,
           phone,
           revive,
           action: <DeleteBalloon handleRemove={() => This.handleRemove(ID)}/> ,
-          detail: <IceButton type="primary"  onClick={()=>{This.handleRewardDetailClick(ID)}}>获奖详情&nbsp;&nbsp;<Icon type="arrow-down"/></IceButton> ,
+          detail: 
+            <IceButton type="primary"  onClick={()=>{This.handleRewardDetailClick(ID, index)}}>
+                获奖详情&nbsp;&nbsp;<Icon type={expandedRowKey===ID?"arrow-up":"arrow-down"}/>
+            </IceButton> ,
           desc:
-            <RewardDetaiList/>
+            <RewardDetaiList
+              id={ID}
+              index={index}
+              pagesize={userRoundPagesize}
+              pageindex={userRoundPageindex}
+              onPageChange={This.getUserRoundList}
+              count={This.props.userRoundCount}
+              data={This.props.userRoundList}
+              userRoundLoading={this.props.userRoundLoading}
+            />
         };
     });
   }
@@ -103,7 +151,6 @@ export default class ExpandedTable extends Component {
   render() {
 
     const {userList, count, loading, pagesize, pageindex} = this.props;
-
     const data = this.getUserListData(userList)
 
     return (
@@ -116,7 +163,7 @@ export default class ExpandedTable extends Component {
             expandedRowIndent={[0,0]}
             expandedRowRender={(record) => record.desc}
             hasExpandedRowCtrl={false}
-            expandedRowKeys={this.state.expandedRowKeys}
+            expandedRowKeys={[this.state.expandedRowKey]}
           >
             <Table.Column title="姓名" dataIndex="name" />
             <Table.Column title="手机" dataIndex="phone" />

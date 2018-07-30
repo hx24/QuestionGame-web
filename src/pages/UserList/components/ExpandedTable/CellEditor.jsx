@@ -13,7 +13,7 @@ export default class CellEditor extends Component {
     this.tempValue = '';
     this.state = {
       editMode: false,
-      value: props.value || '',
+      value: props.value || 0,
     };
   }
 
@@ -44,9 +44,9 @@ export default class CellEditor extends Component {
     this.setState({
       editMode: false,
     });
-    const { index, valueKey } = this.props;
-    const { value } = this.state;
-    this.props.onChange && this.props.onChange(index, valueKey, value);
+    const {id} = this.props;
+    const {value} = this.state;
+    this.props.onReviveChange(id, value);
   };
 
   rollBackThisCell = () => {
@@ -63,6 +63,7 @@ export default class CellEditor extends Component {
         <div className="celleditor">
           <Input
             style={styles.cellInput}
+            defaultValue={0}
             value={value}
             maxLength={3}
             onChange={this.onValueChange}
@@ -71,7 +72,7 @@ export default class CellEditor extends Component {
           <span
             style={styles.operationIcon}
             title="确定"
-            onClick={this.updateValue}
+            onClick={()=>{this.updateValue()}}
           >
             <Icon size="xs" type="select" />
           </span>

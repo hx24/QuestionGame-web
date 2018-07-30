@@ -11,3 +11,8 @@ export async function deleteUser(params) {
 export async function editRevive(params) {
     return request('editRevive',params);
 }
+
+export async function getUserRound(params) {
+    return request('getUserRound',params);
+}
+
