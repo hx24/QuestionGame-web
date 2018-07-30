@@ -4,14 +4,12 @@ import { withRouter } from 'react-router-dom';
 import { Grid } from '@icedesign/base';
 import {
   FormBinderWrapper as IceFormBinderWrapper,
-  FormBinder as IceFormBinder,
-  FormError as IceFormError,
 } from '@icedesign/form-binder';
-import IceIcon from '@icedesign/icon';
 import './UserLogin.scss';
 import { Feedback } from '@icedesign/base';
 import { connect } from "react-redux";
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
+
 
 const { Row, Col } = Grid;
 const FormItem = Form.Item;

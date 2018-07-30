@@ -152,7 +152,10 @@ export default class EditDialog extends Component {
                     ]
                   }
                 )}
-                showTime={{ defaultValue: moment.now() }}
+                showTime={{ 
+                  defaultValue: moment.now(),
+                  format: "HH:mm"
+                }}
               />
             </FormItem>
           </Form>

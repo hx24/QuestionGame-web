@@ -16,8 +16,8 @@
     {
         "icon": "yonghu",
         "name": "用户管理",
-        "hideMenu": true,
+        "hideMenu": false,
         "path":"user",
-        "componentDir": "RoundDetail"
+        "componentDir": "UserList"
     }
 ]
