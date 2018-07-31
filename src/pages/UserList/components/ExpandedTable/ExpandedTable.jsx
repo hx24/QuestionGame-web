@@ -164,6 +164,9 @@ export default class ExpandedTable extends Component {
             expandedRowRender={(record) => record.desc}
             hasExpandedRowCtrl={false}
             expandedRowKeys={[this.state.expandedRowKey]}
+            locale={{
+              empty: "暂无用户",
+            }}
           >
             <Table.Column title="姓名" dataIndex="name" />
             <Table.Column title="手机" dataIndex="phone" />

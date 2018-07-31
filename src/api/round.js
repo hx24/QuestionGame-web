@@ -32,3 +32,7 @@ export async function addQuestion(params) {  // 添加题目
 export async function deleteQuestion(params) {  // 删除题目
     return request('deleteQuestion',params);
 }
+
+export async function getRank(params) {  // 删除题目
+    return request('getRank',params);
+}

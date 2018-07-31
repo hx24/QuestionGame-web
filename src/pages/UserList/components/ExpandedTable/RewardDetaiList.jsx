@@ -23,12 +23,12 @@ export default class RewardDetaiList extends Component {
 
   render() {
 
-    const {pagesize, pageindex, count, data, userRoundLoading} = this.props;
+    const {id, pagesize, pageindex, count, data, userRoundLoading} = this.props;
 
 
     const dataSource = data.map((item, index) => {
         return {
-          key: item.ID+index,
+          key: item.roundName+id,
           roundName: item.roundName,
           startTime: moment(item.startTime).format('YYYY-MM-DD HH:mm:ss'),
           count: item.count,
@@ -44,20 +44,23 @@ export default class RewardDetaiList extends Component {
             dataSource={dataSource}
             primaryKey="key"
             align="center"
+            locale={{
+              empty: "暂无数据",
+            }}
           >
             <Table.Column title="场次名称" dataIndex="roundName" />
             <Table.Column title="答题时间" dataIndex="startTime" />
             <Table.Column title="答对题目" dataIndex="count" />
             <Table.Column title="获得奖金" dataIndex="reward" />
           </Table>
-          <Pagination 
+          {count?<Pagination 
             size="small"
             style={styles.pagenation}
             current={pageindex}
             onChange={this.handlePaginationChange}
             total={count}
             pageSize={pagesize}
-          />
+          />:null}
         </IceContainer>
       </Spin>
     );

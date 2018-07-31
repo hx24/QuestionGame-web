@@ -21,37 +21,3 @@ function getFilterRouterConfig(config) {
 }
 
 export default getFilterRouterConfig(config);
-
-// import HeaderAsideFooterResponsiveLayout from './layouts/HeaderAsideFooterResponsiveLayout';
-// import RoundList from './pages/RoundList';
-// import RoundDetail from './pages/RoundDetail';
-// import Login from './pages/Login';
-
-// const routerConfig1 = [
-//   {
-//     path: '/login',
-//     component: Login,
-//   },
-//   {
-//     path: '/round',
-//     layout: HeaderAsideFooterResponsiveLayout,
-//     component: RoundList,
-//     children: [
-//       {
-//         path: 'list',
-//         layout: HeaderAsideFooterResponsiveLayout,
-//         component: RoundList,
-//       },
-//     ],
-//   },
-//   {
-//     path: '/round/:id',
-//     layout: HeaderAsideFooterResponsiveLayout,
-//     component: RoundDetail,
-//   },
-//   {
-//     path: '*',
-//     layout: HeaderAsideFooterResponsiveLayout,
-//     component: NotFound,
-//   },
-// ];

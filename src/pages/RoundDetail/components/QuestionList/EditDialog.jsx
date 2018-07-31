@@ -23,7 +23,6 @@ export default class EditDialog extends Component {
   handleSubmit = () => {
     this.field.validate((errors, values) => {
       if (errors) {
-        console.log('Errors in form!!!');
         return;
       }
       const {getFormValues, type} = this.props;
@@ -93,7 +92,7 @@ export default class EditDialog extends Component {
                   rules: [{ required: true, message: '必填选项' }],
                 })}
                 multiple 
-                maxLength={100} 
+                maxLength={35} 
                 rows={4} 
                 hasLimitHint 
               />
@@ -121,7 +120,7 @@ export default class EditDialog extends Component {
                                 {...init(`answer${index}`, {
                                   rules: [{ required: true, message: '必填选项' }],
                                 })}
-                                maxLength={20} 
+                                maxLength={12} 
                                 hasLimitHint
                               />
                               </FormItem>

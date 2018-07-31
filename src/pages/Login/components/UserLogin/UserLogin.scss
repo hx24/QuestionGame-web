@@ -63,3 +63,11 @@
     }
   }
 }
+
+@media screen and (max-height: 550px) {
+  .user-login {
+    .content-wrapper {
+      top: 0px;
+    }
+  }
+}

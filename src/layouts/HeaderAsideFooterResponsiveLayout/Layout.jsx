@@ -126,8 +126,11 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
   };
 
   logout = ()=>{
-    delCookie('question');
-    this.props.history.push('/login')
+    // delCookie('question');
+    // this.props.history.push('/login')
+    this.props.dispatch({
+      type: 'logout'
+    })
   }
 
   /**

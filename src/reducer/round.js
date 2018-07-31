@@ -1,5 +1,5 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
-import {getRoundList, updateRound, deleteRound, addRound, getRoundDetail, updateQuestion, addQuestion, deleteQuestion} from '../api/round';
+import {getRoundList, updateRound, deleteRound, addRound, getRoundDetail, updateQuestion, addQuestion, deleteQuestion, getRank} from '../api/round';
 import {store} from '../App';
 import {message} from 'antd';
 
@@ -16,7 +16,9 @@ const initState = {
         "reward":0,
         "time":0,
         "questions": []
-    }
+    },
+    rankCount: 0,
+    rankList: []
 };
 
 export default function round(state = initState, action) {
@@ -55,6 +57,30 @@ export default function round(state = initState, action) {
             return {
                 ...state,
                 detail: action.payload
+            }
+
+        case 'clearDetail': 
+            return {
+                ...state,
+                detail: {
+                    "title":"",
+                    "reward":0,
+                    "time":0,
+                    "questions": []
+                }
+            }
+        
+        case 'updateRankData': 
+            return {
+                ...state,
+                ...action.payload
+            }
+
+        case 'clearRankData': 
+            return {
+                ...state,
+                rankCount: 0,
+                rankList: []
             }
 
         default:
@@ -108,11 +134,10 @@ function * addRoundAsync(action) {
     if (!res.error) {
         message.success('添加成功');
     }
-    // yield put({type: 'addRoundRes', payload: res});
     yield put({type: 'getRoundList'});
 }
 
-function * getRoundDetailAsync(action) {
+function *getRoundDetailAsync(action) {
     const res = yield call(getRoundDetail, action.payload);
     if (!res.error) {
         yield put({type: 'updateDtail', payload: res.result});
@@ -143,6 +168,17 @@ function * deleteQuestionAsync(action) {
     }
 }
 
+function * getRankAsync(action) {
+    const res = yield call(getRank, action.payload);
+    if (!res.error) {
+        yield put({type: 'updateRankData', payload: {
+            rankCount: res.result.count,
+            rankList: res.result.list
+        }});
+    }
+}
+
+
 export function * watchGetRoundAsync() {
     yield takeEvery("getRoundList", getRoundListAsync);
     yield takeEvery("updateRound", updateRoundAsync);
@@ -153,5 +189,8 @@ export function * watchGetRoundAsync() {
     yield takeEvery("updateQuestion", updateQuestionAsync);
     yield takeEvery("addQuestion", addQuestionAsync);
     yield takeEvery("deleteQuestion", deleteQuestionAsync);
+
+    yield takeEvery("getRank", getRankAsync);
+
 
 }

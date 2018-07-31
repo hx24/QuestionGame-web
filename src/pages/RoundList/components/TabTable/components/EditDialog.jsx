@@ -122,6 +122,7 @@ export default class EditDialog extends Component {
           <Form direction="ver" field={this.field}>
             <FormItem label="场次名称：" {...formItemLayout}>
               <Input
+                maxLength={8}
                 {...init('title', {
                   rules: [{ required: true, message: '必填选项' }],
                 })}
@@ -130,10 +131,16 @@ export default class EditDialog extends Component {
 
             <FormItem label="奖金总额：" {...formItemLayout}>
               <Input
-                htmlType="number"
+                maxLength={6}
                 {...init('reward', {
-                  rules: [{validator: this.checkReward}],
-                })}
+                    rules: [{ required: true, message: '必填选项' }],
+                    props:{
+                      onChange:(v)=>{
+                        this.field.setValue('reward',v.replace(/[^\d]/g, ''));
+                      }
+                    }
+                  }
+                )}
               />
             </FormItem>
 

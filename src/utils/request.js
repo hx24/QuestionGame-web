@@ -19,7 +19,6 @@ const errMsg = {
 }
 
 function checkStatus(err) {
-    console.log(JSON.stringify(err))
     const errCode = err.response?err.response.status:408;
     var message = '';
     if(err.response&&err.response.data.error){
@@ -49,8 +48,8 @@ function checkStatus(err) {
 
 
 export default function (path, param = {}) {
-    const url = `http://localhost/admin/${path}`;
-    // const url = `/admin/${path}`;
+    // const url = `http://localhost/admin/${path}`;
+    const url = `/admin/${path}`;
     const action = {
         type: 'updateGlobalLoading',
         payload: {}

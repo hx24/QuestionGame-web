@@ -45,6 +45,12 @@ export default class CustomTable extends Component {
   };
 
   render() {
-    return <Table {...this.props}>{this.renderColumns()}</Table>;
+    return <Table
+              locale={{
+                empty: "暂无场次",
+              }}
+              {...this.props}>
+            {this.renderColumns()}
+          </Table>;
   }
 }

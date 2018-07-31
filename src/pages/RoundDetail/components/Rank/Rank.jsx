@@ -9,7 +9,7 @@ import {Spin} from 'antd';
 import { log } from 'util';
 
 @withRouter
-@connect(({round})=>({...round}))
+@connect(({round,loadings})=>({...round, loading: loadings.getRank}))
 export default class Rank extends Component {
   static displayName = 'Rank';
 
@@ -17,14 +17,12 @@ export default class Rank extends Component {
 
   static defaultProps = {};
 
-  componentDidMount(){
-    if(this.props.list.length===0){
-      this.getPageData(1)
-    }
-  }
-
   constructor(props) {
     super(props);
+    this.state={
+      pagesize: 10,
+      pageindex: 1,
+    }
 
     this.columns = [
       {
@@ -41,8 +39,8 @@ export default class Rank extends Component {
       },
       {
         title: '答对题目',
-        dataIndex: 'count',
-        key: 'count',
+        dataIndex: 'answercount',
+        key: 'answercount',
         width: 150,
       },
       {
@@ -53,12 +51,27 @@ export default class Rank extends Component {
       },
     ];
   }
-  
-  getPageData = pageindex => {
-    const {dispatch} = this.props;
+
+  componentDidMount(){
+    this.getPageData(1)
+  }
+
+  componentWillUnmount(){
+    this.props.dispatch({
+      type: 'clearRankData'
+    })
+  }
+
+  getPageData = (pageindex) => {
+    this.setState({
+      pageindex
+    })
+    const {dispatch, match} = this.props;
     dispatch({
-      type: 'getRoundList',
-      payload: {
+      type: 'getRank',
+      payload: { 
+        id: match.params.id,
+        pagesize: this.state.pagesize,
         pageindex
       }
     })
@@ -66,42 +79,29 @@ export default class Rank extends Component {
 
 
   handlePageChange = (current) => {
-    this.props.dispatch({
-      type: 'updatePageindex',
-      payload: current
-    })
     this.getPageData(current)
   }
 
 
   render() {
 
-    const count=100, loading=false, pagesize=10;
-
-    const mockd = {
-        rank: 1,
-        name: '黄鑫',
-        count: 10,
-        reward: 1000
-    }
-
-    const mockData = [mockd,mockd,mockd,mockd,mockd,mockd,mockd,mockd]
+    const {rankCount, rankList, loading} = this.props;
 
     return (
       <div className="tab-table">
           <Spin spinning={loading}>
             <CustomTable
               style={styles.customTable}
-              dataSource={mockData}
+              dataSource={rankList}
               columns={this.columns}
               hasBorder={false}
             />
-            {count?<Pagination 
+            {rankCount?<Pagination 
               style={styles.pagination} 
               current={this.props.pageindex} 
               onChange={this.handlePageChange} 
-              total={count}
-              pageSize={pagesize}
+              total={rankCount}
+              pageSize={this.state.pagesize}
             />:null}
           </Spin>
       </div>

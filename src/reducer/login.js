@@ -1,5 +1,5 @@
 import { call, put, takeEvery} from 'redux-saga/effects';
-import {login} from '../api/login';
+import {login, logout} from '../api/login';
 import createHistory from 'history/createHashHistory';
 const history = createHistory();
 
@@ -31,9 +31,15 @@ function* loginAsync(action) {
     }
 }
 
+function* logoutAsync() {
+    history.replace('/login')
+    yield call(logout);
+}
+
 
 export function* watchLoginAsync() {
     yield takeEvery("login", loginAsync);
+    yield takeEvery("logout", logoutAsync);
 }
 
 

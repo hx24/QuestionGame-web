@@ -19,15 +19,15 @@ export default class Footer extends PureComponent {
             <Logo />
           </div>
           <div className="copyright">
-            © 2018 Theme designed by{' '}
-            <a
+            © 2018 designed hx{' '}
+            {/* <a
               href="https://github.com/alibaba/ice"
               target="_blank"
               className="copyright-link"
               rel="noopener noreferrer"
             >
               ICE
-            </a>
+            </a> */}
           </div>
         </div>
       </Layout.Footer>

@@ -1,7 +1,6 @@
 /* eslint no-unused-expressions: 0 */
 import React, { Component } from 'react';
-import { Icon, Input } from '@icedesign/base';
-import {message} from 'antd';
+import { Icon, Input, dom  } from '@icedesign/base';
 
 
 export default class CellEditor extends Component {
@@ -25,12 +24,29 @@ export default class CellEditor extends Component {
     }
   }
 
+  componentWillUnmount(){
+    const exitEditMode = this.exitEditMode;
+    document.removeEventListener('click',exitEditMode)
+  }
+
+  exitEditMode = (e) => {
+    if(!(e.target.nodeName==='INPUT'&&e.target.type==='text')){
+      this.setState({
+        editMode: false,
+      })
+      const exitEditMode = this.exitEditMode;
+      document.removeEventListener('click',exitEditMode)
+    }
+  }
+
   editThisCell = () => {
     // 缓存数据以便回滚
     this.tempValue = this.state.value;
     this.setState({
       editMode: true,
     });
+    const exitEditMode = this.exitEditMode;
+    document.addEventListener('click',exitEditMode)
   };
 
   onValueChange = (value) => {
@@ -49,11 +65,11 @@ export default class CellEditor extends Component {
     this.props.onReviveChange(id, value);
   };
 
-  rollBackThisCell = () => {
-    this.setState({
-      editMode: false,
-    });
-  };
+  // rollBackThisCell = () => {
+  //   this.setState({
+  //     editMode: false,
+  //   });
+  // };
 
   render() {
     const { value, editMode } = this.state;
@@ -62,6 +78,7 @@ export default class CellEditor extends Component {
       return (
         <div className="celleditor">
           <Input
+            ref={input=>this.input=input}
             style={styles.cellInput}
             defaultValue={0}
             value={value}
@@ -76,19 +93,19 @@ export default class CellEditor extends Component {
           >
             <Icon size="xs" type="select" />
           </span>
-          <span
+          {/* <span
             style={styles.operationIcon}
             title="撤销"
             onClick={this.rollBackThisCell}
           >
             <Icon size="xs" type="refresh" />
-          </span>
+          </span> */}
         </div>
       );
     }
     return (
       <div className="celleditor">
-        <span>{value}</span>
+        <span style={styles.cellValue}>{value}</span>
         <span
           style={styles.operationIcon}
           className="celleditor-trigger"
@@ -106,6 +123,11 @@ const styles = {
   cellInput: {
     width: 'calc(30%)',
     minWidth: '40px',
+  },
+  cellValue: {
+    display: 'inline-block',
+    width: '30px',
+    textAlign: 'center',
   },
   operationIcon: {
     marginLeft: '10px',

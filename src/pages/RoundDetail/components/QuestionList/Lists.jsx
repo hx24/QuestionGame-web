@@ -36,6 +36,12 @@ export default class Lists extends Component {
       })
   }
 
+  componentWillUnmount(){
+    this.props.dispatch({
+      type: 'clearDetail', 
+    })
+  }
+
   getFormValues = (values, type) => {
     const {dispatch, match} = this.props;
     const payload = {
