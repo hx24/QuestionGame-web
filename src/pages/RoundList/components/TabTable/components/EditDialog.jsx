@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Dialog, Button, Form, Input, Field, DatePicker, moment } from '@icedesign/base';
-import {Button as AntButton} from 'antd';
+import { Button, moment } from '@icedesign/base';
+import {DatePicker, Button as AntButton, Form, Input, Modal} from 'antd';
 
 const FormItem = Form.Item;
 
+@Form.create()
 export default class EditDialog extends Component {
   static displayName = 'EditDialog';
 
@@ -15,35 +16,38 @@ export default class EditDialog extends Component {
       visible: false,
       dataIndex: null,
     };
-    this.field = new Field(this);
+  }
+
+  componentDidMount(){
+    const {record={}} = this.props;
+    var time = record.time?moment(record.time):null;
+    this.props.form.setFieldsValue({
+      title: record.title||'',
+      reward: record.reward||'',
+      time
+    });
   }
 
   handleSubmit = () => {
-    this.field.validate((errors, values) => {
-      if (errors) {
-        console.log('Errors in form!!!');
-        return;
+    const {form} = this.props;
+    form.validateFields((err, values)=>{
+      if (!err) {
+        const { dataIndex } = this.state;
+        const {getFormValues, type} = this.props;
+        const submitValues = {
+          ...values,
+          time: values.time.unix()*1000,
+          ID: this.props.record.ID
+        }
+        getFormValues(dataIndex, submitValues, type);
+        this.setState({
+          visible: false,
+        });
       }
-
-      const { dataIndex } = this.state;
-      const {getFormValues, type} = this.props;
-      const submitValues = {
-        ...values,
-        time: values.time.getTime()
-      }
-      getFormValues(dataIndex, submitValues, type);
-      this.setState({
-        visible: false,
-      });
     });
   };
 
-  onOpen = (index, record) => {
-    var time = record?new Date(record.time):null;
-    this.field.setValues({
-      ...record,
-      time
-    });
+  onOpen = (index) => {
     this.setState({
       visible: true,
       dataIndex: index,
@@ -57,8 +61,7 @@ export default class EditDialog extends Component {
   };
 
   checkTime = (rule, value, callback) => {
-    console.log(value);
-    if (value && value.getTime() <= Date.now()) {
+    if (value && value.isBefore(moment())) {
       callback(new Error("开始时间不能小于当前时间!"));
     } else {
       callback();
@@ -78,14 +81,18 @@ export default class EditDialog extends Component {
   }
 
   render() {
-    const init = this.field.init;
-    const { index, record, type } = this.props;
+    const { getFieldDecorator } = this.props.form;
+
+    const { index, type } = this.props;
+
     const formItemLayout = {
       labelCol: {
-        fixedSpan: 6,
+        xs: { span: 14 },
+        sm: { span: 6 },
       },
       wrapperCol: {
-        span: 14,
+        xs: { span: 2 },
+        sm: { span: 14 },
       },
     };
 
@@ -95,13 +102,13 @@ export default class EditDialog extends Component {
     <Button
       size="small"
       type="primary"
-      onClick={() => this.onOpen(index, record)}
+      onClick={() => this.onOpen(index)}
     >
       {title}
     </Button>:
     <AntButton
       type="primary"
-      onClick={() => this.onOpen(index, record)}
+      onClick={() => this.onOpen(index)}
     >
       {title}
     </AntButton>
@@ -110,63 +117,58 @@ export default class EditDialog extends Component {
 
       <div style={styles.editDialog}>
         {button}
-        <Dialog
-          style={{ width: 640 }}
+        <Modal
+          style={{ width: '40%',minWidth: 300,maxWidth:640 }}
           visible={this.state.visible}
           onOk={this.handleSubmit}
-          closable="esc,mask,close"
+          closable
           onCancel={this.onClose}
           onClose={this.onClose}
           title={title}
         >
-          <Form direction="ver" field={this.field}>
+          <Form direction="ver">
             <FormItem label="场次名称：" {...formItemLayout}>
-              <Input
-                maxLength={8}
-                {...init('title', {
-                  rules: [{ required: true, message: '必填选项' }],
-                })}
-              />
+              {getFieldDecorator('title', {
+                rules: [{ required: true, message: '必填选项' }],
+              })(
+                <Input 
+                  maxLength={8}
+                />
+              )}
             </FormItem>
 
             <FormItem label="奖金总额：" {...formItemLayout}>
-              <Input
-                maxLength={6}
-                {...init('reward', {
-                    rules: [{ required: true, message: '必填选项' }],
-                    props:{
-                      onChange:(v)=>{
-                        this.field.setValue('reward',v.replace(/[^\d]/g, ''));
-                      }
-                    }
-                  }
-                )}
-              />
+              {getFieldDecorator('reward', {
+                rules: [{ required: true, message: '必填选项' }],
+              })(
+                <Input
+                  maxLength={6}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.replace(/[^\d]/g, '');
+                  }}
+                />
+              )}
             </FormItem>
 
             <FormItem label="开始时间：" {...formItemLayout}>
-              <DatePicker
-                {...init('time', {
-                    rules: [
-                      { 
-                        required: true, 
-                        message: '必填选项',
-                        type: "date", 
-                      },
-                      {
-                        validator: this.checkTime
-                      }
-                    ]
-                  }
-                )}
-                showTime={{ 
-                  defaultValue: moment.now(),
-                  format: "HH:mm"
-                }}
-              />
+              {getFieldDecorator('time', {
+                rules: [
+                  { required: true, message: '必填选项' },
+                  {validator: this.checkTime}
+                ],
+              })(
+                <DatePicker
+                  placeholder={'请选择时间'}
+                  format={'YYYY-MM-DD HH:mm'}
+                  showTime={{ 
+                    defaultValue: moment(),
+                    format: "HH:mm"
+                  }}
+                />
+              )}
             </FormItem>
           </Form>
-        </Dialog>
+        </Modal>
       </div>
     );
   }
