@@ -18,16 +18,6 @@ export default class EditDialog extends Component {
     };
   }
 
-  componentDidMount(){
-    const {record={}} = this.props;
-    var time = record.time?moment(record.time):null;
-    this.props.form.setFieldsValue({
-      title: record.title||'',
-      reward: record.reward||'',
-      time
-    });
-  }
-
   handleSubmit = () => {
     const {form} = this.props;
     form.validateFields((err, values)=>{
@@ -48,6 +38,13 @@ export default class EditDialog extends Component {
   };
 
   onOpen = (index) => {
+    const {record={}} = this.props;
+    var time = record.time?moment(record.time):null;
+    this.props.form.setFieldsValue({
+      title: record.title||'',
+      reward: record.reward||'',
+      time
+    });
     this.setState({
       visible: true,
       dataIndex: index,
