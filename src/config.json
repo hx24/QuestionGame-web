@@ -19,5 +19,12 @@
         "hideMenu": false,
         "path":"user",
         "componentDir": "UserList"
+    },
+    {
+        "icon": "qrcode",
+        "name": "二维码",
+        "hideMenu": false,
+        "path":"QRcode",
+        "componentDir": "QRcode"
     }
 ]

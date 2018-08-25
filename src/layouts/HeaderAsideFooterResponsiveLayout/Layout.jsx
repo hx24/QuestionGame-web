@@ -17,7 +17,6 @@ import { HashRouter as Router} from 'react-router-dom';
 import { connect } from 'react-redux';
 import routers from '../../router';
 import {asideMenuConfig} from '../../menuConfig';
-import {delCookie} from '../../utils/util';
 
 // 设置默认的皮肤配置，支持 dark 和 light 两套皮肤配置
 const theme = typeof THEME === 'undefined' ? 'dark' : THEME;

@@ -26,7 +26,7 @@ export default class RewardDetaiList extends Component {
     const {id, pagesize, pageindex, count, data, userRoundLoading} = this.props;
 
 
-    const dataSource = data.map((item, index) => {
+    const dataSource = data.map((item) => {
         return {
           key: item.roundName+id,
           roundName: item.roundName,
